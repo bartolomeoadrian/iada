@@ -1,7 +1,6 @@
 import logging
 import sys
 import chromadb
-import os
 from llama_index.core import  SimpleDirectoryReader, VectorStoreIndex
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
@@ -10,8 +9,8 @@ from llama_index.core import Settings
 from llama_index.llms.ollama import Ollama
 
 # log
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
+# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+# logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
 # llm
 Settings.llm = Ollama(model="llama2", request_timeout=60.0)
@@ -36,6 +35,6 @@ index = VectorStoreIndex.from_documents(
 )
 
 # query
-query_engine = index.as_query_engine(llm=Ollama(model="llama2", request_timeout=60.0))
-response = query_engine.query("De que trata la noticia?")
-print(response)
+query_engine = index.as_query_engine(streaming=True, llm=Ollama(model="llama2", request_timeout=120.0))
+response_stream = query_engine.query("De que trata la noticia?")
+response_stream.print_response_stream()
