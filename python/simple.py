@@ -1,7 +1,7 @@
 import logging
 import sys
 import chromadb
-from llama_index.core import  SimpleDirectoryReader, VectorStoreIndex
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import StorageContext
@@ -13,6 +13,12 @@ from llama_index.llms.ollama import Ollama
 # logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
 # llm
-llm = Ollama(model="llama2", request_timeout=60.0)
-response  = llm.complete("Cual es la ley 23349")
-print(response)
+llm = Ollama(model="llama2", request_timeout=120.0)
+
+while True:
+    query = input("Query: ")
+    response = llm.complete(
+        query + "\nRespond in Spanish\nSobre la república Argentina"
+    )
+    print(response)
+    print("------")

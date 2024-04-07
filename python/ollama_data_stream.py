@@ -16,7 +16,7 @@ from llama_index.llms.ollama import Ollama
 Settings.llm = Ollama(model="llama2", request_timeout=60.0)
 
 # data
-documents = SimpleDirectoryReader("data").load_data()
+documents = SimpleDirectoryReader("data/txt").load_data()
 
 # vector store
 db = chromadb.PersistentClient(path="./chroma")

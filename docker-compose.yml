@@ -1,15 +1,9 @@
 version: "3.5"
 
 services:
-  mongodb:
-    container_name: mongodb
-    image: mongodb/mongodb-community-server:latest
-    ports:
-      - "27017:27017"
-
   elasticsearch:
     container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
     ports:
       - "9200:9200"
     environment:
