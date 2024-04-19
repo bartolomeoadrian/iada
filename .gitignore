@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Chroma
+/chroma/*
+!/chroma/.gitkeep
+
 # C extensions
 *.so
 
