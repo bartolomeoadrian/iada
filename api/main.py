@@ -1,6 +1,9 @@
+from typing import Union
+from fastapi import FastAPI
 from vanna.ollama import Ollama
 from vanna.chromadb import ChromaDB_VectorStore
 from vanna.flask import VannaFlaskApp
+
 
 class MyVanna(ChromaDB_VectorStore, Ollama):
     def __init__(self, config=None):
@@ -13,7 +16,12 @@ vn = MyVanna(
         "path": "./chroma",
         "model": "llama3",
         "ollama_host": "http://localhost:11434",
-        "initial_prompt": "The user might question something that requires a SQL code or not, if not, generate an empty response, else you will only respond with SQL code and not with any explanations.\n",
+        "initial_prompt": """
+			You are an assistant that helps users to search for information about legislative project of Argentina.
+			The user must not know that you can generate SQL code or that you hace access to a database, dont suggest it.
+        	The user might question something that requires a SQL code or not.
+         	if the question does not require a SQL code, respond normally.
+          	If the question requires a SQL code you will only respond with SQL code and not with any explanations.\n""",
     }
 )
 
@@ -60,19 +68,10 @@ vn.train(
     """
 )
 
-response = vn.generate_sql("Hola")
-print(response)
+app = FastAPI()
 
-response = vn.generate_sql("Hola, como estas?")
-print(response)
 
-response = vn.generate_sql("Hola, cuantos proyectos hay en total?")
-print(response)
-
-# app = VannaFlaskApp(vn)
-# app.run()
-
-# while True:
-#     query = input("Query: ")
-#     vn.ask(question=query)
-#     print("------")
+@app.get("/ask")
+def ask(question: Union[str, None] = None):
+    response = vn.generate_sql(question or "")
+    return {"response": response}
