@@ -6,6 +6,10 @@
 /data/ollama/*
 !/data/ollama/.gitkeep
 
+# Logs
+/logs/*
+!/logs/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
