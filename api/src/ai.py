@@ -1,8 +1,5 @@
-from typing import Union
-from fastapi import FastAPI
 from vanna.ollama import Ollama
 from vanna.chromadb import ChromaDB_VectorStore
-from vanna.flask import VannaFlaskApp
 
 
 class MyVanna(ChromaDB_VectorStore, Ollama):
@@ -13,7 +10,7 @@ class MyVanna(ChromaDB_VectorStore, Ollama):
 
 vn = MyVanna(
     config={
-        "path": "./chroma",
+        "path": "./data/chroma",
         "model": "llama3",
         "ollama_host": "http://localhost:11434",
         "initial_prompt": """
@@ -67,11 +64,3 @@ vn.train(
 		- sumario: resumen del proyecto
     """
 )
-
-app = FastAPI()
-
-
-@app.get("/ask")
-def ask(question: Union[str, None] = None):
-    response = vn.generate_sql(question or "")
-    return {"response": response}

@@ -1,11 +1,15 @@
+# Chroma
+/data/chroma/*
+!/data/chroma/.gitkeep
+
+# Ollama
+/data/ollama/*
+!/data/ollama/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Chroma
-/chroma/*
-!/chroma/.gitkeep
 
 # C extensions
 *.so
