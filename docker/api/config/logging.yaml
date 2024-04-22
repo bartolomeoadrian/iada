@@ -20,13 +20,13 @@ handlers:
 loggers:
   uvicorn:
     level: INFO
-    handlers: [console, file]
+    handlers: [console]
     propagate: no
   uvicorn.access:
     level: DEBUG
-    handlers: [console, file]
+    handlers: [console]
     propagate: no
   uvicorn.error:
     level: DEBUG
-    handlers: [console, file]
+    handlers: [console]
     propagate: no

@@ -6,5 +6,30 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+
+  ollama:
+    image: iada-ollama
+    restart: always
+    volumes:
+      - ./data/ollama:/root/.ollama
+
+  chroma:
+    image: chromadb/chroma
+    restart: always
+
+  api:
+    image: iada-api
+    restart: always
+    depends_on:
+      - db
+      - chroma
+      - ollama
+    volumes:
+      - ./data/api:/api/data
     ports:
-      - "5432:5432"
+      - "8080:8080"
+    environment:
+      OLLAMA_MODEL: llama3
+      OLLAMA_URL: http://ollama:11434
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      CHROMA_URL: http://chroma:8000
