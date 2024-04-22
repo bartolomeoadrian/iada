@@ -7,10 +7,10 @@ app = FastAPI()
 
 
 @app.get("/api/chat")
-def chat(question: Union[str, None] = None):
+def chat(message: Union[str, None] = None):
     auto_train = False
 
-    response = vn.generate_sql(question or "")
+    response = vn.generate_sql(message or "")
     is_sql = vn.is_sql_valid(response)
 
     if is_sql:
@@ -19,7 +19,7 @@ def chat(question: Union[str, None] = None):
             response = df.to_dict(orient="records")
 
             if len(df) > 0 and auto_train:
-                vn.add_question_sql(question=question, sql=response)
+                vn.add_question_sql(question=message, sql=response)
 
         except Exception as e:
             logging.error(e)

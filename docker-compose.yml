@@ -19,23 +19,30 @@ services:
     volumes:
       - ./data/chroma:/chroma/chroma
 
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+      - api
+
   api:
     image: iada-api
     restart: always
-    depends_on:
-      - db
-      - chroma
-      - ollama
     environment:
       OLLAMA_MODEL: llama3
       OLLAMA_URL: http://ollama:11434
       DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
       CHROMA_URL: http://chroma:8000
+    depends_on:
+      - db
+      - chroma
+      - ollama
 
   web:
     image: iada-web
     restart: always
-    ports:
-      - "5173:5173"
-    environment:
-      API_URL: http://api:8080
