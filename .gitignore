@@ -1,49 +1,7 @@
 # Chroma
 /data/chroma/*
 !/data/chroma/.gitkeep
-/docker/api/data/chroma/*
-!/docker/api/data/chroma/.gitkeep
 
 # Ollama
 /data/ollama/*
 !/data/ollama/.gitkeep
-
-# Logs
-/logs/*
-!/logs/.gitkeep
-
-/docker/api/logs/*
-!/docker/api/logs/.gitkeep
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/

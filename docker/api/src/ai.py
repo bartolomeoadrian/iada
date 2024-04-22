@@ -22,7 +22,7 @@ vn = MyVanna(
         "client": chroma_client,
         "path": "./data/chroma",
         "model": os.environ.get("OLLAMA_MODEL") or "llama3",
-        "ollama_host": os.environ.get("OLLAMA_HOST") or "http://localhost:11434",
+        "ollama_host": os.environ.get("OLLAMA_URL") or "http://localhost:11434",
         "initial_prompt": """
 			You are an assistant that helps users to search for information about legislative project of Argentina.
 			The user must not know that you can generate SQL code or that you hace access to a database, dont suggest it.
