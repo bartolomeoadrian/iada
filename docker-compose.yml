@@ -31,11 +31,13 @@ services:
       - api
 
   api:
-    image: iada-api
+    build:
+      context: ./docker/api
     restart: always
     environment:
       OLLAMA_MODEL: llama3
-      OLLAMA_URL: http://ollama:11434
+      #OLLAMA_URL: http://ollama:11434
+      OLLAMA_URL: http://host.docker.internal:11434
       DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
       CHROMA_URL: http://chroma:8000
     depends_on:
@@ -44,5 +46,6 @@ services:
       - ollama
 
   web:
-    image: iada-web
+    build:
+      context: ./docker/web
     restart: always
