@@ -4,6 +4,7 @@ import './Chat.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 type Message = {
 	id?: string,
@@ -15,21 +16,17 @@ type Message = {
 	date: Date,
 }
 
-type SystemMessage = {
-	response: string,
-	type: "text" | "table",
-}
-
 function Chat() {
 	const box = useRef<HTMLDivElement>(null);
+	const input = useRef<HTMLInputElement>(null);
 
 	const [message, setMessage] = useState("");
-	const [systemMessage, setSystemMessage] = useState("");
-	const [ready, setReady] = useState(false);
+	const [locked, setLocked] = useState(false);
 	const [messages, setMessages] = useState<Array<Message>>([]);
 
 	const chat = () => {
 		if (!message) return;
+		if (locked) return;
 
 		const newMessages: Array<Message> = [...messages, {
 			title: 'You',
@@ -48,6 +45,8 @@ function Chat() {
 
 
 	const send = (message: string, messages: Array<Message>) => {
+		setLocked(true);
+
 		const id = Math.random().toString(36).substring(7);
 
 		const newMessages: Array<Message> = [...messages, {
@@ -72,6 +71,21 @@ function Chat() {
 					setMessages([...newMessages])
 				}
 			}
+		}).then(response => {
+			const data = response.data
+			try {
+				const parsedData = JSON.parse(data)
+				const temporalMessage = newMessages.find(msg => msg.id === id)
+				if (temporalMessage) {
+					temporalMessage.type = parsedData.type;
+					temporalMessage.data = parsedData.response;
+					setMessages([...newMessages])
+				}
+			} catch (e) {
+				//NO ES JSON
+			}
+		}).finally(() => {
+			setLocked(false);
 		});
 	}
 
@@ -105,39 +119,13 @@ function Chat() {
 		</div>
 	}
 
-	/*useEffect(() => {
-		if (!ready) return;
-
-		setReady(false);
-
-		const drawSystemMessage = (message: SystemMessage) => {
-			if (message.type === "table") {
-				setMessages([...messages, {
-					title: 'Bot',
-					position: 'left',
-					type: 'table',
-					data: message.response,
-					date: new Date(),
-				}])
-			} else {
-				setMessages([...messages, {
-					title: 'Bot',
-					position: 'left',
-					type: 'text',
-					text: JSON.stringify(message.response),
-					date: new Date(),
-				}])
-			}
-		}
-
-
-		send()
-	}, [ready, message, messages])*/
-
 	useEffect(() => {
 		if (box.current) {
-			//box.current.scrollIntoView({ behavior: "smooth" });
+			box.current.scrollIntoView({ behavior: "smooth" });
 			//Debería ser antes del ultimo mensaje recibido
+			if (input.current) {
+				input.current.focus();
+			}
 		}
 	}, [messages])
 
@@ -181,6 +169,7 @@ function Chat() {
 						<input
 							placeholder="Escriba su mensaje aquí..."
 							value={message}
+							disabled={locked}
 							onChange={(e: ChangeEvent<HTMLInputElement>) => {
 								setMessage(e.currentTarget.value)
 							}}
@@ -189,9 +178,10 @@ function Chat() {
 									chat()
 								}
 							}}
+							ref={input}
 						/>
 						<button onClick={chat} title="Send" >
-							<FontAwesomeIcon icon={faPaperPlane} color='#FFF' />
+							{locked ? <FontAwesomeIcon icon={faLock} color='#FFF' /> : <FontAwesomeIcon icon={faPaperPlane} color='#FFF' />}
 						</button>
 					</div>
 				</div>
