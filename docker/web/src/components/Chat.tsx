@@ -3,8 +3,10 @@ import { MessageBox } from 'react-chat-elements';
 import './Chat.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import axios from 'axios';
 
 type Message = {
+	id?: string,
 	title: string,
 	position: string,
 	type: "text" | "file" | "system" | "table",
@@ -22,21 +24,55 @@ function Chat() {
 	const box = useRef<HTMLDivElement>(null);
 
 	const [message, setMessage] = useState("");
+	const [systemMessage, setSystemMessage] = useState("");
 	const [ready, setReady] = useState(false);
 	const [messages, setMessages] = useState<Array<Message>>([]);
 
 	const chat = () => {
 		if (!message) return;
 
-		setMessages([...messages, {
+		const newMessages: Array<Message> = [...messages, {
 			title: 'You',
 			position: 'right',
 			type: 'text',
 			text: message,
 			date: new Date(),
-		}])
+		}];
 
-		setReady(true)
+		setMessages(newMessages)
+
+		setMessage("");
+
+		send(message, newMessages);
+	}
+
+
+	const send = (message: string, messages: Array<Message>) => {
+		const id = Math.random().toString(36).substring(7);
+
+		const newMessages: Array<Message> = [...messages, {
+			id: id,
+			title: 'Bot',
+			position: 'left',
+			type: 'text',
+			text: "",
+			date: new Date(),
+		}];
+
+		setMessages(newMessages)
+
+		axios.get(`/api/chat?message=${message}`, {
+			responseType: 'stream',
+			onDownloadProgress: progressEvent => {
+				const xhr = progressEvent.event.target
+				const { responseText } = xhr
+				const temporalMessage = newMessages.find(msg => msg.id === id)
+				if (temporalMessage) {
+					temporalMessage.text = responseText
+					setMessages([...newMessages])
+				}
+			}
+		});
 	}
 
 	const drawTable = (message: Message) => {
@@ -69,7 +105,7 @@ function Chat() {
 		</div>
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		if (!ready) return;
 
 		setReady(false);
@@ -94,20 +130,9 @@ function Chat() {
 			}
 		}
 
-		const send = () => {
-			setMessage("")
-
-			fetch(`/api/chat?message=${message}`, {
-				method: 'GET',
-			}).then(res => res.json()).then(data => {
-				drawSystemMessage(data);
-			}).catch(err => {
-				console.error(err)
-			});
-		}
 
 		send()
-	}, [ready, message, messages])
+	}, [ready, message, messages])*/
 
 	useEffect(() => {
 		if (box.current) {

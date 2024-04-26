@@ -6,6 +6,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
 
   ollama:
     image: ollama/ollama
@@ -18,6 +20,8 @@ services:
     restart: always
     volumes:
       - ./data/chroma:/chroma/chroma
+    ports:
+      - "8000:8000"
 
   nginx:
     image: nginx
