@@ -60,7 +60,7 @@ function Chat() {
 
 		setMessages(newMessages)
 
-		axios.get(`/api/chat?message=${message}`, {
+		axios.get(`/api/chat?message=${message}&chat_id=${1}`, {
 			responseType: 'stream',
 			onDownloadProgress: progressEvent => {
 				const xhr = progressEvent.event.target
