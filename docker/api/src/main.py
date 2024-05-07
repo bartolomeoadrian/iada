@@ -61,11 +61,9 @@ def get_messages(chat_id, message, **kwargs):
 
     prompt = vn.get_sql_prompt(
         initial_prompt="""
-			Sos un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.
-			El usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.
-			El usuario podría preguntar algo que requiera un código SQL o no.
-			Si la pregunta no requiere un código SQL, respondé normalmente.
-			Si la pregunta requiere un código SQL, solo respondé con código SQL y no con explicaciones, SOLO con código SQL.\n""",
+         	Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.
+         	El usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.
+         	Solo responderas con código SQL y no con explicaciones, SOLO con código SQL, no responderas con sugerencias.\n""",
         question=message,
         question_sql_list=vn.get_similar_question_sql(message, **kwargs),
         ddl_list=vn.get_related_ddl(message, **kwargs),
@@ -82,6 +80,8 @@ def stream_sql_generator(first_chunk, stream):
     query = first_chunk["message"]["content"]
     for chunk in stream:
         query += chunk["message"]["content"]
+
+    messages.append({"role": "assistant", "content": query})
 
     try:
         return json.dumps(
@@ -101,9 +101,13 @@ def stream_generator(stream):
     if is_sql:
         yield stream_sql_generator(first_chunk, stream)
     else:
+        message = first_message
         yield first_message
         for chunk in stream:
+            message = message + chunk["message"]["content"]
             yield chunk["message"]["content"]
+
+        messages.append({"role": "assistant", "content": message})
 
 
 def ask_ollama(chat_id, message):
