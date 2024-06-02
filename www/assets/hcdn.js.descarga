@@ -1,0 +1,195 @@
+
+
+
+
+function abrirIMG(imageUrl) {
+$("#descarga").attr('href', imageUrl);
+$("#imgs").removeAttr('src');
+$("#imgs").attr('src', imageUrl);
+$('#imgs').removeAttr('hidden');
+document.getElementById("pdfs").hidden = true
+
+};
+
+function abrirPDF(e) {
+$("#descarga").attr('href', e);
+
+
+$("#pdfs").removeAttr('src');
+$("#descarga").removeAttr('src');
+
+if (window.location.protocol == "https:"){
+e = e.replace("http://", "https://");
+}
+$("#pdfs").attr('src', e);
+$('#targetDiv').append( $("#pdfs"));
+
+$("#descarga").attr('href', e);
+$('#targetDiv').append( $("#descarga"));
+
+$('#pdfs').removeAttr('hidden');
+document.getElementById("imgs").hidden = true
+
+};
+		
+		
+Node.prototype.hasClass = function (className) {
+	if (this.classList) {
+        	return this.classList.contains(className);
+    	} else {
+        	return (-1 < this.className.indexOf(className));
+    	}
+};
+
+Node.prototype.addClass = function (className) {
+    	if (this.classList) {
+        	this.classList.add(className);
+    	} else if (!this.hasClass(className)) {
+        	//var classes = this.className.split(" ");
+        	//classes.push(className);
+        	//this.className = classes.join(" ");
+        	this.className += " " + className;
+    	}
+    	return this;
+};
+
+Node.prototype.removeClass = function (className) {
+    	if (this.classList) {
+        	this.classList.remove(className);
+    	} else {
+        	//var classes = this.className.split(" ");
+        	//classes.splice(classes.indexOf(className), 1);
+        	//this.className = classes.join(" ");
+        	this.className = this.className.replace(new RegExp('(?:^|\\s)'+className+'(?!\\S)'), '');
+    	}
+    	return this;
+};
+
+Node.prototype.toggleClass = function (className) {
+	if (this.classList) {
+        	this.classList.toggle(className);
+    	} else {
+    		if (this.hasClass(className)) {
+        		this.removeClass(className);
+    		} else {
+    			this.addClass(className);
+    		}
+    	}
+    	return this;
+};
+
+/* Adds Element BEFORE NeighborElement */
+Element.prototype.appendBefore = function(element) {
+  element.parentNode.insertBefore(this, element);
+}, false;
+
+/* Adds Element AFTER NeighborElement */
+Element.prototype.appendAfter = function(element) {
+  element.parentNode.insertBefore(this, element.nextSibling);
+}, false;
+
+/******** VIDEO JS *********/
+
+// TODO 
+videojs.Html5DashJS.hook('beforeinitialize', function(player, mediaPlayer) {
+	mediaPlayer.getDebug().setLogToBrowserConsole(false);
+});
+
+function normalizeVideoPath(videoPath) {
+	videoPath.replace(/^\/|\/$/g, "");
+	if (videoPath.indexOf("/") < 0) {
+		videoPath = "vod/" + videoPath;
+	}
+	return videoPath
+}
+
+function startVideoPlayer(id, videoPath, autoplay, poster) {
+	// validate
+	if (typeof id !== 'string' || typeof videoPath !== 'string' || typeof autoplay !== 'boolean') {
+		console.log("startVideoPlayer error: uno o mas parametros invalidos.");
+    		return null
+    	}
+
+	videoPath = normalizeVideoPath(videoPath);
+
+	// chequear que id pertenezca a un element de tipo video
+	var playerElement = document.getElementById(id);
+	if (playerElement === null) {
+		console.log("startVideoPlayer error: id '" + id + "' no pertenece a ningun elemento.");
+		return null;
+	}
+	if (playerElement.tagName !== "VIDEO") {
+		console.log("startVideoPlayer error: id '" + id + "' no pertenece a un elemento de tipo video.");
+		return null;
+	}
+	
+	var player = videojs(id);
+
+	player.ready(function() {
+		player.src([
+			{ // DASH
+				src: 'https://argos.hcdn.gob.ar/' + videoPath + '/manifest.mpd',
+				type: 'application/dash+xml' 
+			},
+			{ // HLS
+				src: 'https://argos.hcdn.gob.ar/' + videoPath + '/playlist.m3u8',
+				type: 'application/x-mpegURL' 
+			},
+			{ // RTMP
+				src: 'rtmp://argos.hcdn.gob.ar/' + videoPath,
+				type: 'rtmp/mp4' 
+			}
+		]);
+		player.controls(true);
+		player.aspectRatio('16:9');
+		player.autoplay(autoplay);
+		
+		if(typeof poster != 'undefined' && poster && poster.length > 0) {
+			player.poster(poster);
+		}
+	});
+	
+	
+	
+	return player
+}
+
+function pauseVideoPlayer(player) {
+	if (typeof player !== "undefined" && player !== null) { 
+        	player.pause();
+        }
+}
+
+function playVideoPlayer(player) {
+	if (typeof player !== "undefined" && player !== null) { 
+        	player.play();
+        }
+}
+
+function updateVideoPlayer(player, videoPath) {
+	videoPath = normalizeVideoPath(videoPath);
+	
+	player.src([
+		{ // DASH
+			src: 'https://argos.hcdn.gob.ar/' + videoPath + '/manifest.mpd',
+			type: 'application/dash+xml' 
+		},
+		{ // HLS
+			src: 'https://argos.hcdn.gob.ar/' + videoPath + '/playlist.m3u8',
+			type: 'application/x-mpegURL' 
+		},
+		{ // RTMP
+			src: 'rtmp://argos.hcdn.gob.ar/' + videoPath,
+			type: 'rtmp/mp4' 
+		}
+	]);
+}
+
+function videoExists(videoPath) {
+	videoPath = normalizeVideoPath(videoPath);
+	videoPath = 'https://argos.hcdn.gob.ar/' + videoPath + '/manifest.mpd';			
+	var http = new XMLHttpRequest();
+	http.open('HEAD', videoPath, false);
+	http.send();
+	return (http.status != 404);   
+}

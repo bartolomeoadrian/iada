@@ -1,0 +1,88 @@
+#nav_left {text-align: right;padding:1rem 0;}
+
+@media (min-width: 768px) {
+	#nav_left {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		
+	}
+	#nav_left ul li ul li a {background:var(--bg-secundario);border: 0;box-shadow: 0.43rem 0.42rem  0.44rem  -0.25rem rgba(0, 0, 0, 0.23);color: #385074;padding: 0.3rem 1rem;border: 1px solid #eee;text-align:center;font-size:var(--font-size-body);}
+	#nav_left .nav {display: block;padding: 0;margin: 0;}
+	#nav_left ul li ul {border: 0;background: 0;display: contents;}
+	#nav_left .dropdown-menu li {display: inline-block;margin-left: 0.4rem; margin-bottom: 1rem;}
+	#nav_left > ul > li > a {display: none;}
+	#nav_left > a  , .btnSesiones button{
+		background: var(--bg-secundario);
+		border: 0;
+		box-shadow: 0.43rem 0.42rem 0.44rem -0.25rem rgba(0, 0, 0, 0.23);
+		color: #385074;
+		padding: 0.41rem 1rem;
+		border: 1px solid #eee;
+		text-align: center;
+		font-size: var(--font-size-body);
+		margin-left: 0.5rem;
+		line-height: 0.9rem;
+		margin-top: -2px;
+		min-width: 4.4rem;
+		height:1.8rem;
+		border-radius:0;
+	}
+	.btnSesiones .dropdown-menu a {
+			display: block;
+			background: var(--bg-secundario);
+			border: 0;
+			color: #385074;
+			padding: 0.4rem 1rem;
+			border-bottom: 1px solid #eee;
+			text-align: center;
+			font-size: var(--font-size-body);
+			box-shadow: 0.43rem 0.42rem 0.44rem -0.25rem rgba(0, 0, 0, 0.23);
+		}
+		a.dropdown-item:hover {
+			background: #eee;
+		}
+	
+	
+}
+
+@media (max-width: 767px) {
+#nav_left {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+	justify-content:end;
+}
+		#nav_left ul li a {
+			display: block;
+			background: var(--bg-secundario);
+			border: 0;
+			color: #385074;
+			padding: 0.4rem 1rem;
+			border-bottom: 1px solid #eee;
+			text-align: center;
+			font-size: var(--font-size-body);
+			box-shadow: 0.43rem 0.42rem 0.44rem -0.25rem rgba(0, 0, 0, 0.23);
+		}
+	
+	#nav_left .nav {display: inline-block;}
+	#nav_left .dropdown-menu.show {border-radius: 0;}
+	
+#nav_left > a, .btnSesiones button{
+    background: var(--bg-secundario);
+    border: 0;
+    box-shadow: 0.43rem 0.42rem 0.44rem -0.25rem rgba(0, 0, 0, 0.23);
+    color: #385074;
+    padding: 0.7rem 1rem;
+    border: 1px solid #eee;
+    text-align: center;
+    font-size: var(--font-size-body);
+    margin-left: 0.25rem;
+    line-height: 0.9rem;
+    margin-top: -2px;
+    min-width: 4.4rem;
+    height: 2.3rem;
+	border-radius:0;
+}
+}
+
+

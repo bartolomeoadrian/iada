@@ -1,54 +1,46 @@
 services:
-  db:
+  postgresql:
     image: postgres
-    restart: always
-    shm_size: 128mb
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./storage/postgresql:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-  ollama:
-    image: ollama/ollama
-    restart: always
-    volumes:
-      - ./data/ollama:/root/.ollama
-
   chroma:
     image: chromadb/chroma
-    restart: always
+    restart: unless-stopped
     volumes:
-      - ./data/chroma:/chroma/chroma
-    ports:
-      - "8000:8000"
+      - ./storage/chroma:/chroma/chroma
 
   nginx:
     image: nginx
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./www:/var/www/html
     depends_on:
-      - web
-      - api
+      - chat-frontend
+      - chat-backend
 
-  api:
+  chat-backend:
     build:
-      context: ./docker/api
-    restart: always
+      context: ./chat/backend
+    restart: unless-stopped
     environment:
-      OLLAMA_MODEL: llama3
-      OLLAMA_URL: http://host.docker.internal:11434
       DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
       CHROMA_URL: http://chroma:8000
     depends_on:
-      - db
+      - postgresql
       - chroma
-      - ollama
 
-  web:
+  chat-frontend:
     build:
-      context: ./docker/web
-    restart: always
+      context: ./chat/frontend
+    volumes:
+      - ./www/chat:/app/dist
