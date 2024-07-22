@@ -1,0 +1,45 @@
+:root{
+/* Color texto */	
+	--color-primario: #444444;
+	--color-secundario: #ffffff;
+	--color-institucional:#5c98bd;
+	
+/* Color texto hover */
+	--color-nav-hover: #ffffff;
+	--bg-nav-hover: #444444;
+	
+/* Color fondo */		
+	--bg-primario: #f6f6f6;
+	--bg-secundario:#ffffff;
+	--bg-institucional:#5c98bd;
+	--bg-tables-th:#444;
+	--bg-subdropdown:#f2f2f2;
+	--bg-destacados-secundario:#C7C5C6;
+	--bg-destacados-institucional:#e5edf7;
+	--bg-box-light:#f5f5f5;
+	
+	
+	
+/* Color fondo Hover */	
+	--bg-institucional-hover:#497895;
+	
+	
+/* Color Subsitios */	
+	--color-icap:#619f97;
+	--color-icap-hover:#49847c;
+	--color-cultura:#a51b2b;
+	--color-cultura-hover:#8a1623;
+	--color-visitas:#931653;
+	--color-visitas-hover:#770f42;
+
+/* Fonts */	
+	--font-family:'Roboto Condensed', sans-serif;
+	--font-size-root:100%;
+	--font-size-body:0.9rem;
+	--font-size-medium:1.12rem;
+}
+
+/* icons */
+--bg-icon-accordeon:/system/modules/ar.gob.hcdn.base/resources/img/flechaAcordeon.jpg;
+
+

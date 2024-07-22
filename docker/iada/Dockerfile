@@ -1,0 +1,34 @@
+FROM nginx:1.27.0-alpine
+
+USER root
+
+# Install supervisor
+RUN apk add supervisor
+ADD ./config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Install nodejs and npm
+RUN apk add nodejs npm
+
+# Build the frontend
+WORKDIR /opt/iada/frontend
+
+ADD ./src/frontend/package.json .
+ADD ./src/frontend/package-lock.json .
+
+RUN npm ci
+
+ADD ./src/frontend .
+
+RUN npm run build
+RUN mkdir -p /var/www/html/chat
+RUN cp -r ./dist/* /var/www/html/chat
+
+# Configurattion
+WORKDIR /opt/iada
+
+ADD ./config/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD ./storage/www /var/www/html
+
+EXPOSE 80
+
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

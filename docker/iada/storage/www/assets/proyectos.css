@@ -1,0 +1,145 @@
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	font-size:smaller;
+}
+
+#desc {
+	font-size:smaller;
+	color: silver;	
+	margin-bottom:3px;	
+}
+
+#principal > .tabGral {
+	position: relative;
+}
+
+.cabeceraForm {
+	background: #4d4d4f;
+    color: #fff!important;
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    text-transform: uppercase;
+}
+
+.tabGral .limited {
+	display:block;
+	margin:0 auto;
+	max-width: 700px;
+}
+
+.tabGral .limited .form-inline, .tabGral form .btn.btn-primary { 
+	margin-bottom:15px;
+}
+
+.tabGral .form-horizontal .control-label {
+	text-align:left;
+	text-transform: uppercase;
+	    font-weight: 200;
+}
+
+.bat-selector {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 5px;
+}
+a.colapser {
+	text-decoration: none;	
+}
+.ui-datepicker-calendar thead th, .ui-datepicker-calendar thead tr{
+	background: none; 
+    border: none;
+    color: #333 !important;
+    font-size: .9em !important;
+    font-weight: normal !important;
+    padding: 0.7em!important;
+}
+/*========= RESULTADOS BUSQUEDA ==============*/
+.resultados-proyectos .resultados-title {
+	font-size: 14px;
+}
+
+.resultados-proyectos nav {
+	text-align: center;
+}
+
+.resultados-proyectos nav .pagination {
+	justify-content: center;
+}
+
+.resultados-proyectos h4 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.resultados-proyectos .btn-ver-original {
+	background: #5c98bd;
+    padding: 10px;
+    margin: 10px auto 30px;
+    display: block;
+    width: max-content;
+    color: #fff;
+    line-height: 1;
+	border: 0;
+}
+
+.resultados-proyectos .detalle-proyecto + .detalle-proyecto{
+	margin-top: 30px;
+    border-top: 10px solid #ddd;
+    padding-top: 30px;
+}
+
+.resultados-proyectos .detalle-proyecto:first-of-type {
+	margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+}
+
+.resultados-proyectos .detalle-proyecto h5{
+	background: #4f4f51 none repeat scroll 0 0;
+    border: 1px solid #ededed;
+    color: #fff !important;
+    font-size: 1em !important;
+    font-weight: normal !important;
+    padding: 0.7em!important;
+    margin-bottom: 0;
+    border-bottom: none;
+    text-align: center;
+}
+
+.resultados-proyectos .detalle-proyecto thead th, .detalle-proyecto thead tr {
+    background-color: #8b8b90;
+}
+
+.resultados-proyectos .dp-texto {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+    text-align: justify;
+    margin: 5px 0 20px;
+}
+
+.resultados-proyectos .dp-metadata > span {
+	margin-right: 15px;
+}
+
+/*======= BUSCADOR PROYECTOS ======*/
+
+.buscador-wrapper {
+	max-width: 700px;
+    width: 100%;
+    margin: auto;
+}
+.ver-datos {
+	float: right;
+}
+.buscador-wrapper .control-label {
+    display: flex;
+    align-items: center;
+    font-weight: 200;
+    text-transform: uppercase;
+}

@@ -1,0 +1,25 @@
+.btn.btn-primary, input.btn.btn-primary.btn-block {
+	background:var(--bg-institucional);
+    border-radius: 0;
+    border: 0;
+	font-size:var(--font-size-body);
+}
+
+.btn.btn-primary:hover, input.btn.btn-primary.btn-block:hover {background:var(--bg-institucional-hover);}
+
+input.btn.btn-primary.btn-block{width: 100%;margin-top: 1.87rem;}
+
+.btnInstitucional {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0.1rem 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin-right: calc(var(--bs-gutter-x) * .5);
+}
+
+.btn-top-right{position:absolute; right:0; top:-2rem;}
+
+.btn-blancoConBorde {border: 1px solid #ccc;border-radius: 0;font-size: 0.8rem;padding: 0.5rem;}
+.btn-blancoConBorde:hover{border: 1px solid #999;}
