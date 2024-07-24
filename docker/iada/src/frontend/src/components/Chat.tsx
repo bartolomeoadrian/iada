@@ -1,9 +1,10 @@
+import './Chat.css'
+
+import axios from 'axios';
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { MessageBox } from 'react-chat-elements';
-import './Chat.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import axios from 'axios';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 type Message = {
