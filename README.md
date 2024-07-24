@@ -1,8 +1,10 @@
-![Image](https://app.hcdn.gob.ar/assets/img/logo-hcdn.png)
+<p align="center">
+  <img src="https://app.hcdn.gob.ar/assets/img/logo-hcdn.png" height="100px"/>
+</p>
 
 # Project Title
 
-Brief description of the project.
+This study proposes a system that uses NLP technologies to facilitate access to legislative information in the Chamber of Deputies of the Nation Argentina. The system is based on an LLM and a user-centered design, and aims to improve transparency and citizen participation in the legislative process.
 
 ## Table of Contents
 
