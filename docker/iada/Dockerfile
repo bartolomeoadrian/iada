@@ -23,6 +23,21 @@ RUN npm run build
 RUN mkdir -p /var/www/html/chat
 RUN cp -r ./dist/* /var/www/html/chat
 
+# Install pyhton
+RUN apk add python3 py3-pip
+
+# Install the backend
+WORKDIR /opt/iada/backend
+
+ADD ./src/backend/requirements.txt .
+
+RUN --mount=type=cache,target=/root/.cache \
+	pip install -r requirements.txt
+
+COPY . .
+
+RUN python -c "import chromadb;client = chromadb.Client();collection = client.create_collection('all-my-documents');collection.add(documents=['This is document1'], ids=['doc1']);results = collection.query(query_texts=['This is a query document'],n_results=1)"
+
 # Configurattion
 WORKDIR /opt/iada
 

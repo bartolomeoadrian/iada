@@ -64,35 +64,49 @@ Save the `.env` file and you're all set!
 
 ## Development
 
+Containers you might need to develop
+
+1. Chroma:
+
+   ```
+   docker run -p 8000:8000 chromadb/chroma:0.5.4
+   ```
+
+1. PostgreSQL:
+
+   ```
+   docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres postgres:16.3
+   ```
+
 To start developing the backend of the project using FastAPI and Python, follow these steps:
 
 1. Make sure you have Python installed on your machine. You can download it from the official Python website.
 
-2. Clone the project repository:
+1. Clone the project repository:
 
    ```
    git clone https://github.com/bartolomeoadrian/iada
    ```
 
-3. Navigate to the project directory:
+1. Navigate to the project directory:
 
    ```
    cd iada
    ```
 
-4. Navigate to the backend directory:
+1. Navigate to the backend directory:
 
    ```
    cd docker/iada/src/backend
    ```
 
-5. Create a new virtual environment for your project:
+1. Create a new virtual environment for your project:
 
    ```shell
    python -m venv ./.venv
    ```
 
-6. Activate the virtual environment:
+1. Activate the virtual environment:
 
    - For Windows:
 
@@ -106,21 +120,21 @@ To start developing the backend of the project using FastAPI and Python, follow 
      source ./.venv/bin/activate
      ```
 
-7. Install the project dependencies:
+1. Install the project dependencies:
 
    ```shell
    pip install -r requirements.txt
    ```
 
-8. Start the development server:
+1. Start the development server:
 
    ```shell
-   uvicorn src.main:app --reload-dir ./src
+   uvicorn src.main:app --reload-dir ./src --port 3001
    ```
 
    This command will start the FastAPI development server and automatically reload the server whenever you make changes to your code. You can access the development server at `http://localhost:8000`.
 
-9. Start coding!
+1. Start coding!
 
    You can now start coding your backend endpoints and logic. Any changes you make will be automatically reflected in the server.
 

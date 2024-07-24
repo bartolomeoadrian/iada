@@ -4,21 +4,23 @@ from vanna.ollama import Ollama
 from vanna.chromadb import ChromaDB_VectorStore
 
 
-class MyVanna(ChromaDB_VectorStore, Ollama):
-    def __init__(self, config=None):
-        ChromaDB_VectorStore.__init__(self, config=config)
-
-
 chroma_url = os.environ.get("CHROMA_URL") or "http://localhost:8000"
+
+print(f"Connecting to ChromaDB at {chroma_url}")
 
 chroma_client = chromadb.HttpClient(
     host=chroma_url.split("://")[1].split(":")[0],
     port=chroma_url.split("://")[1].split(":")[1],
 )
 
+
+class MyVanna(ChromaDB_VectorStore, Ollama):
+    def __init__(self, config=None):
+        ChromaDB_VectorStore.__init__(self, config=config)
+
+
 vn = MyVanna(config={"client": chroma_client, "path": "./data/chroma"})
 
-# DDL statements are powerful because they specify table names, colume names, types, and potentially relationships
 vn.train(
     ddl="""
 CREATE TABLE IF NOT EXISTS iada.proyectos
@@ -37,9 +39,8 @@ CREATE TABLE IF NOT EXISTS iada.proyectos
 """
 )
 
-# Sometimes you may want to add documentation about your business terminology or definitions.
 vn.train(
-    documentation="""En la tabla iada.proyectos se almacenan los proyectos de ley que han sido presentados en el Congreso de la República Argentina. 
+    documentation="""En la tabla iada.proyectos se almacenan los proyectos de ley que han sido presentados en el Congreso de la República Argentina.
     Los campos son:
 		- id: identificador único del proyecto
 		- iniciado: en que cámara fue iniciado el proyecto
