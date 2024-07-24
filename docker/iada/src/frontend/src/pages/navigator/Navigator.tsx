@@ -7,7 +7,7 @@ function Navigator() {
 			width: "100dvw",
 			height: "100dvh",
 		}}>
-			<Chat />
+			<Chat url='/api/chat/navigator' />
 		</div>
 	)
 }

@@ -24,7 +24,7 @@ messages = []
 
 
 db_url = (
-    os.environ.get("DATABASE_URL")
+    os.environ.get("POSTGRES_URL")
     or "postgres://postgres:postgres@localhost:5432/postgres"
 )
 
@@ -121,7 +121,13 @@ def ask_ollama(chat_id, message):
     return stream
 
 
-@app.get("/api/chat")
-async def chat(chat_id: str, message: str):
+@app.get("/api/chat/proyects")
+async def proyects(chat_id: str, message: str):
+    stream = ask_ollama(chat_id, message)
+    return StreamingResponse(stream_generator(stream), media_type="text/event-stream")
+
+
+@app.get("/api/chat/navigator")
+async def navigator(chat_id: str, message: str):
     stream = ask_ollama(chat_id, message)
     return StreamingResponse(stream_generator(stream), media_type="text/event-stream")

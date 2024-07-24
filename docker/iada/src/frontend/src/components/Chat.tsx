@@ -17,7 +17,11 @@ type Message = {
 	date: Date,
 }
 
-function Chat() {
+type ChatProps = {
+	url: string,
+}
+
+function Chat(props: ChatProps) {
 	const box = useRef<HTMLDivElement>(null);
 	const input = useRef<HTMLInputElement>(null);
 
@@ -61,7 +65,7 @@ function Chat() {
 
 		setMessages(newMessages)
 
-		axios.get(`/api/chat?message=${message}&chat_id=${1}`, {
+		axios.get(`${props.url}?message=${message}&chat_id=${1}`, {
 			responseType: 'stream',
 			onDownloadProgress: progressEvent => {
 				const xhr = progressEvent.event.target

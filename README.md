@@ -2,7 +2,7 @@
   <img src="https://app.hcdn.gob.ar/assets/img/logo-hcdn.png" height="100px"/>
 </p>
 
-# Project Title
+# IADA
 
 This study proposes a system that uses NLP technologies to facilitate access to legislative information in the Chamber of Deputies of the Nation Argentina. The system is based on an LLM and a user-centered design, and aims to improve transparency and citizen participation in the legislative process.
 
@@ -10,6 +10,7 @@ This study proposes a system that uses NLP technologies to facilitate access to 
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Development](#development)
 - [License](#license)
 - [Contact](#contact)
 
@@ -47,6 +48,125 @@ To install and run a Docker project, follow these steps:
 That's it! You have successfully installed and run the Docker project. For more advanced configuration and usage, refer to the project's documentation.
 
 ## Configuration
+
+To configure the project, create a `.env` file in the root directory of the project and add the following variables:
+
+```
+COMPOSE_PROJECT_NAME=iada
+PORT=80
+POSTGRES_URL=postgres://postgres:postgres@postgresql:5432/postgres
+CHROMA_URL=http://chroma:8000
+```
+
+Make sure to replace the values of `POSTGRES_URL` and `CHROMA_URL` with the appropriate URLs for your PostgreSQL and Chroma instances.
+
+Save the `.env` file and you're all set!
+
+## Development
+
+To start developing the backend of the project using FastAPI and Python, follow these steps:
+
+1. Make sure you have Python installed on your machine. You can download it from the official Python website.
+
+2. Clone the project repository:
+
+   ```
+   git clone https://github.com/bartolomeoadrian/iada
+   ```
+
+3. Navigate to the project directory:
+
+   ```
+   cd iada
+   ```
+
+4. Navigate to the backend directory:
+
+   ```
+   cd docker/iada/src/backend
+   ```
+
+5. Create a new virtual environment for your project:
+
+   ```shell
+   python -m venv ./.venv
+   ```
+
+6. Activate the virtual environment:
+
+   - For Windows:
+
+     ```shell
+     ./.venv/Scripts/activate
+     ```
+
+   - For macOS/Linux:
+
+     ```shell
+     source ./.venv/bin/activate
+     ```
+
+7. Install the project dependencies:
+
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+8. Start the development server:
+
+   ```shell
+   uvicorn src.main:app --reload-dir ./src
+   ```
+
+   This command will start the FastAPI development server and automatically reload the server whenever you make changes to your code. You can access the development server at `http://localhost:8000`.
+
+9. Start coding!
+
+   You can now start coding your backend endpoints and logic. Any changes you make will be automatically reflected in the server.
+
+That's it! You have successfully set up the backend development environment using FastAPI and Python. Happy coding!
+
+To start developing the frontend of the project, follow these steps:
+
+1. Make sure you have Node.js installed on your machine. You can download it from the official Node.js website.
+
+2. Clone the project repository:
+
+   ```
+   git clone https://github.com/bartolomeoadrian/iada
+   ```
+
+3. Navigate to the project directory:
+
+   ```
+   cd iada
+   ```
+
+4. Navigate to the frontend directory:
+
+   ```
+   cd docker/iada/src/frontend
+   ```
+
+5. Install the project dependencies:
+
+   ```
+   npm install
+   ```
+
+6. Start the development server:
+
+   ```
+   npm run dev
+   ```
+
+   This command will start the Vite development server and compile your frontend code. You can access the development server at `http://localhost:3000`.
+
+7. Start coding!
+
+   You can now start coding your frontend components and styles. Any changes you make will be automatically reflected in the browser.
+
+That's it! You have successfully set up the frontend development environment using Vite. Happy coding!
 
 ## License
 
