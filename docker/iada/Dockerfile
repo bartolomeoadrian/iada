@@ -29,10 +29,14 @@ RUN apk add python3 py3-pip
 # Install the backend
 WORKDIR /opt/iada/backend
 
+RUN python3 -m venv ./.venv
+
+ENV PATH="/opt/iada/backend/.venv/bin:$PATH"
+
 ADD ./src/backend/requirements.txt .
 
 RUN --mount=type=cache,target=/root/.cache \
-	pip install -r requirements.txt
+	pip install -v -r requirements.txt
 
 COPY . .
 

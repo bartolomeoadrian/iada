@@ -6,6 +6,8 @@
 
 This study proposes a system that uses NLP technologies to facilitate access to legislative information in the Chamber of Deputies of the Nation Argentina. The system is based on an LLM and a user-centered design, and aims to improve transparency and citizen participation in the legislative process.
 
+The academic paper can be found in the `/documents` directory.
+
 ## Table of Contents
 
 - [Installation](#installation)

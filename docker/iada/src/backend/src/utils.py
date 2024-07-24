@@ -1,10 +1,28 @@
-import logging
-import json
-import psycopg2.pool
 import os
-from ollama import Client
+import json
+import logging
+import psycopg2.pool
+import google.generativeai as genai
 from src.ai import vn
 from typing import Union
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+generation_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
+}
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    # safety_settings = Adjust safety settings
+    # See https://ai.google.dev/gemini-api/docs/safety-settings
+    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\nEstas son las páginas con las que trabajaras por ahora:\nhttps://hcdn.gob.ar : Es la página principal y contiene noticias y actividades ademas de botones de interés\nhttps://hcdn.gob.ar/proyectos/ : Esta página contiene toda la información referida a proyectos de ley de la república argentina, asi como tambien Boletín de Asuntos Tratados, Trámite Parlamentario, Boletín de Asuntos Entrados",
+)
 
 messages = []
 
