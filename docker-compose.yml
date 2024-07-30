@@ -23,7 +23,7 @@ services:
     ports:
       - "${PORT}:80"
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_URL: ${POSTGRES_URL}
       CHROMA_URL: ${CHROMA_URL}
     depends_on:
       - postgresql
