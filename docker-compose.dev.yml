@@ -1,8 +1,8 @@
 services:
-    postgres:
+    postgresql:
         extends:
             file: docker-compose.yml
-            service: postgres
+            service: postgresql
 
     chroma:
         extends:
@@ -16,5 +16,5 @@ services:
         volumes:
             - ./docker/iada/config/supervisor/supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf
             - ./docker/iada/config/nginx/nginx.dev.conf:/etc/nginx/nginx.conf
-            - ./docker/iada/src/backend/src:/opt/backend/src
-            - ./docker/iada/src/frontend/src:/opt/frontend/src
+            - ./docker/iada/src/backend/src:/opt/iada/backend/src
+            - ./docker/iada/src/frontend/src:/opt/iada/frontend/src

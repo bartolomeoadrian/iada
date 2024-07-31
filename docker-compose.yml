@@ -12,7 +12,7 @@ services:
     <<: [*restart_policy]
 
   chroma:
-    image: chromadb/chroma:0.5.4
+    image: chromadb/chroma:0.5.5
     volumes:
       - ./storage/chroma:/chroma/chroma
     <<: [*restart_policy]
