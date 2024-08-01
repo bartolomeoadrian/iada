@@ -16,15 +16,13 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
-model = genai.GenerativeModel(
+navigator_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    # safety_settings = Adjust safety settings
-    # See https://ai.google.dev/gemini-api/docs/safety-settings
     system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\nEstas son las páginas con las que trabajaras por ahora:\nhttps://hcdn.gob.ar : Es la página principal y contiene noticias y actividades ademas de botones de interés\nhttps://hcdn.gob.ar/proyectos/ : Esta página contiene toda la información referida a proyectos de ley de la república argentina, asi como tambien Boletín de Asuntos Tratados, Trámite Parlamentario, Boletín de Asuntos Entrados",
 )
 
-messages = []
+chats = {}
 
 db_url = (
     os.environ.get("POSTGRES_URL")
@@ -64,9 +62,9 @@ def get_messages(chat_id, message, **kwargs):
 
     prompt = vn.get_sql_prompt(
         initial_prompt="""
-         	Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.
-         	El usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.
-         	Solo responderas con código SQL y no con explicaciones, SOLO con código SQL, no responderas con sugerencias.\n""",
+		 	Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.
+		 	El usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.
+		 	Solo responderas con código SQL y no con explicaciones, SOLO con código SQL, no responderas con sugerencias.\n""",
         question=message,
         question_sql_list=vn.get_similar_question_sql(message, **kwargs),
         ddl_list=vn.get_related_ddl(message, **kwargs),
@@ -113,12 +111,27 @@ def stream_generator(stream):
         messages.append({"role": "assistant", "content": message})
 
 
-def ask(chat_id, message):
+def navigator_stream_generator(stream):
+    for chunk in stream:
+        yield chunk.text
+
+
+def ask_proyects(chat_id, message):
     client = Client(host=os.environ.get("OLLAMA_URL") or "http://localhost:11434")
     stream = client.chat(
         model=os.environ.get("OLLAMA_MODEL") or "llama3",
         messages=get_messages(chat_id, message),
         stream=True,
     )
+
+    return stream
+
+
+def ask_navigator(chat_id, message):
+    if chat_id not in chats:
+        chats[chat_id] = navigator_model.start_chat()
+
+    chat: genai.ChatSession = chats[chat_id]
+    stream = chat.send_message(message, stream=True)
 
     return stream

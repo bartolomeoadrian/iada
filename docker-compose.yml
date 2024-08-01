@@ -25,6 +25,7 @@ services:
     environment:
       POSTGRES_URL: ${POSTGRES_URL}
       CHROMA_URL: ${CHROMA_URL}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     depends_on:
       - postgresql
       - chroma

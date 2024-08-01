@@ -13,6 +13,8 @@ services:
         extends:
             file: docker-compose.yml
             service: iada
+        environment:
+            - WATCHFILES_FORCE_POLLING=true
         volumes:
             - ./docker/iada/config/supervisor/supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf
             - ./docker/iada/config/nginx/nginx.dev.conf:/etc/nginx/nginx.conf
