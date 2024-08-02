@@ -24,6 +24,7 @@ function Chat(props: { url: string }) {
 	const messagesWrapper = useRef<HTMLDivElement>(null);
 	const input = useRef<HTMLInputElement>(null);
 
+	const [chatID, setChatID] = useState<string | null>(null);
 	const [message, setMessage] = useState("");
 	const [lastMessage, setLastMessage] = useState("");
 	const [locked, setLocked] = useState(false);
@@ -66,7 +67,7 @@ function Chat(props: { url: string }) {
 		setMessages(newMessages)
 		let lastMessage = ""
 
-		axios.get(`${props.url}?message=${message}&chat_id=${ulid()}`, {
+		axios.get(`${props.url}?message=${message}&chat_id=${chatID}`, {
 			onDownloadProgress: progressEvent => {
 				const xhr = progressEvent.event.target
 				const { responseText } = xhr
@@ -85,9 +86,13 @@ function Chat(props: { url: string }) {
 
 	useEffect(() => {
 		if (lastMessage) {
-			const urlRegex = /(https?:\/\/[^\s]+)/g;
-			const urls = lastMessage.match(urlRegex);
-			console.log("urls", urls, lastMessage)
+			// Expresión regular mejorada para capturar URLs desde texto en formato Markdown
+			const urlRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi;
+			const urls = [];
+			let match;
+			while ((match = urlRegex.exec(lastMessage)) !== null) {
+				urls.push(match[2]); // Captura solo la URL
+			}
 
 			if (urls && urls.length > 0) {
 				const redirectUrl = urls[0];
@@ -103,8 +108,13 @@ function Chat(props: { url: string }) {
 
 				setMessages(newMessages)
 
+				console.log("redirecting to", redirectUrl)
+
 				setTimeout(() => {
-					window.location.href = redirectUrl;
+					window?.top?.postMessage(JSON.stringify({
+						type: "redirect",
+						url: redirectUrl
+					}), "*");
 				}, 5000);
 			}
 		}
@@ -119,6 +129,19 @@ function Chat(props: { url: string }) {
 			input.current.focus();
 		}
 	}, [messages])
+
+	useEffect(() => {
+		// Recuperar chatID desde session storage al cargar el componente
+		const storedChatID = sessionStorage.getItem('chat_id_nagivation');
+		if (storedChatID) {
+			setChatID(storedChatID);
+		}else{
+			const newChatID = ulid()
+			setChatID(newChatID);
+			sessionStorage.setItem('chat_id_nagivation', newChatID);
+		}
+	}, []);
+
 
 	return (
 		<>

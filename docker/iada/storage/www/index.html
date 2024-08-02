@@ -1904,7 +1904,18 @@
 	<script src="/assets/bootstrap.bundle.min.js.descarga"></script>
 	<script src="/assets/video.min(1).js.descarga"></script>
 	<script src="/assets/slick.min(1).js.descarga"></script>
-
+	<script>
+		window.onmessage = function (e) {
+			try {
+				const data = JSON.parse(e.data);
+				if (data.type === 'redirect') {
+					window.location.href = data.url;
+				}
+			} catch (e) {
+				//console.log(e);
+			}
+		};
+	</script>
 
 </body>
 

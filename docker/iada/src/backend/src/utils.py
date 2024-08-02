@@ -129,6 +129,7 @@ def ask_proyects(chat_id, message):
 
 def ask_navigator(chat_id, message):
     if chat_id not in chats:
+        print("Starting chat", chat_id, chats)
         chats[chat_id] = navigator_model.start_chat()
 
     chat: genai.ChatSession = chats[chat_id]
