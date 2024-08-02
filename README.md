@@ -58,6 +58,7 @@ COMPOSE_PROJECT_NAME=iada
 PORT=80
 POSTGRES_URL=postgres://postgres:postgres@postgresql:5432/postgres
 CHROMA_URL=http://chroma:8000
+GEMINI_API_KEY=
 ```
 
 Make sure to replace the values of `POSTGRES_URL` and `CHROMA_URL` with the appropriate URLs for your PostgreSQL and Chroma instances.

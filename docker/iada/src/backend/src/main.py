@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 from .utils import (
     ask_proyects,
     ask_navigator,
-    stream_generator,
+    proyects_stream_generator,
     navigator_stream_generator,
 )
 
@@ -24,7 +24,9 @@ app.add_middleware(
 @app.get("/api/chat/proyects")
 async def proyects(chat_id: str, message: str):
     stream = ask_proyects(chat_id, message)
-    return StreamingResponse(stream_generator(stream), media_type="text/event-stream")
+    return StreamingResponse(
+        proyects_stream_generator(stream), media_type="text/event-stream"
+    )
 
 
 @app.get("/api/chat/navigator")

@@ -22,7 +22,14 @@ navigator_model = genai.GenerativeModel(
     system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\nEstas son las páginas con las que trabajaras por ahora:\nhttps://hcdn.gob.ar : Es la página principal y contiene noticias y actividades ademas de botones de interés\nhttps://hcdn.gob.ar/proyectos/ : Esta página contiene toda la información referida a proyectos de ley de la república argentina, asi como tambien Boletín de Asuntos Tratados, Trámite Parlamentario, Boletín de Asuntos Entrados",
 )
 
-chats = {}
+proyects_model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nSolo responderas con código SQL o ayudarás al usuario con sus dudas",
+)
+
+navigation_chats = {}
+proyects_chats = {}
 
 db_url = (
     os.environ.get("POSTGRES_URL")
@@ -57,14 +64,9 @@ def execute_query_and_fetchall(query: str) -> Union[list, str]:
         raise e
 
 
-def get_messages(chat_id, message, **kwargs):
-    global messages
-
-    prompt = vn.get_sql_prompt(
-        initial_prompt="""
-		 	Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.
-		 	El usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.
-		 	Solo responderas con código SQL y no con explicaciones, SOLO con código SQL, no responderas con sugerencias.\n""",
+def get_proyect_message(message, **kwargs):
+    return vn.get_sql_prompt(
+        initial_prompt=""" """,
         question=message,
         question_sql_list=vn.get_similar_question_sql(message, **kwargs),
         ddl_list=vn.get_related_ddl(message, **kwargs),
@@ -72,17 +74,11 @@ def get_messages(chat_id, message, **kwargs):
         **kwargs,
     )
 
-    messages = messages + prompt
 
-    return messages
-
-
-def stream_sql_generator(first_chunk, stream):
+def proyects_stream_sql_generator(first_chunk, stream):
     query = first_chunk["message"]["content"]
     for chunk in stream:
         query += chunk["message"]["content"]
-
-    messages.append({"role": "assistant", "content": query})
 
     try:
         return json.dumps(
@@ -93,22 +89,20 @@ def stream_sql_generator(first_chunk, stream):
         return """Lo siento, no pude encontrar la información que buscas. ¿Podrías intentar preguntar de otra manera?"""
 
 
-def stream_generator(stream):
+def proyects_stream_generator(stream):
     first_chunk = next(stream)
-    first_message = first_chunk["message"]["content"]
+    first_message = first_chunk.text
     sql = vn.extract_sql_query(first_message)
     is_sql = vn.is_sql_valid(sql)
 
     if is_sql:
-        yield stream_sql_generator(first_chunk, stream)
+        yield proyects_stream_sql_generator(first_chunk, stream)
     else:
         message = first_message
         yield first_message
         for chunk in stream:
-            message = message + chunk["message"]["content"]
-            yield chunk["message"]["content"]
-
-        messages.append({"role": "assistant", "content": message})
+            message = message + chunk.text
+            yield chunk.text
 
 
 def navigator_stream_generator(stream):
@@ -117,22 +111,20 @@ def navigator_stream_generator(stream):
 
 
 def ask_proyects(chat_id, message):
-    client = Client(host=os.environ.get("OLLAMA_URL") or "http://localhost:11434")
-    stream = client.chat(
-        model=os.environ.get("OLLAMA_MODEL") or "llama3",
-        messages=get_messages(chat_id, message),
-        stream=True,
-    )
+    if chat_id not in proyects_chats:
+        proyects_chats[chat_id] = proyects_model.start_chat()
+
+    chat: genai.ChatSession = proyects_chats[chat_id]
+    stream = chat.send_message(message, stream=True)
 
     return stream
 
 
 def ask_navigator(chat_id, message):
-    if chat_id not in chats:
-        print("Starting chat", chat_id, chats)
-        chats[chat_id] = navigator_model.start_chat()
+    if chat_id not in navigation_chats:
+        navigation_chats[chat_id] = navigator_model.start_chat()
 
-    chat: genai.ChatSession = chats[chat_id]
+    chat: genai.ChatSession = navigation_chats[chat_id]
     stream = chat.send_message(message, stream=True)
 
     return stream
