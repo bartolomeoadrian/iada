@@ -127,3 +127,29 @@
 	border: 0px;
 	cursor: pointer;
 }
+
+
+.table_wrapper {
+	width: 100%;
+	overflow: auto;
+	margin: 20px 0px;
+	border-radius: 15px;
+}
+
+.table_wrapper table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table_wrapper table td {
+	padding: 10px;
+}
+
+.table_wrapper table thead {
+	background-color: 5c98bd;
+	color: #fff;
+}
+
+.table_wrapper table thead th {
+	padding: 10px;
+}

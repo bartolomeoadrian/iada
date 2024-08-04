@@ -78,10 +78,53 @@ function Chat(props: { url: string }) {
 					lastMessage = responseText
 				}
 			}
+		}).then(response => {
+			const data = response.data
+			try {
+				const parsedData = JSON.parse(data)
+				const temporalMessage = newMessages.find(msg => msg.id === id)
+				if (temporalMessage) {
+					temporalMessage.type = parsedData.type;
+					temporalMessage.data = parsedData.response;
+					setMessages([...newMessages])
+				}
+			} catch (e) {
+				//NO ES JSON
+			}
 		}).finally(() => {
 			setLocked(false);
 			setLastMessage(lastMessage);
 		});
+	}
+
+	const drawTable = (message: Message) => {
+		if (!Array.isArray(message.data)) return <></>;
+
+		const first = message.data[0];
+		const headers = Object.keys(first);
+
+		return <div className='table_wrapper'>
+			<table>
+				<thead>
+					<tr>
+						{headers.map((header, i) => <th key={i}>{header}</th>)}
+					</tr>
+				</thead>
+				<tbody>
+					{message.data.map((row, i) => {
+						return (
+							<tr key={i}>
+								{headers.map((header, j) => {
+									return (
+										<td key={j}>{row[header]}</td>
+									)
+								})}
+							</tr>
+						)
+					})}
+				</tbody>
+			</table>
+		</div>
 	}
 
 	useEffect(() => {
@@ -135,7 +178,7 @@ function Chat(props: { url: string }) {
 		const storedChatID = sessionStorage.getItem('chat_id_nagivation');
 		if (storedChatID) {
 			setChatID(storedChatID);
-		}else{
+		} else {
 			const newChatID = ulid()
 			setChatID(newChatID);
 			sessionStorage.setItem('chat_id_nagivation', newChatID);
@@ -157,7 +200,7 @@ function Chat(props: { url: string }) {
 										</div>
 										<div className="body">
 											<div className="text">
-												{msg.text}
+												{msg.type === "table" ? drawTable(msg) : msg.text}
 											</div>
 										</div>
 										<div className="footer">

@@ -18,7 +18,7 @@ The academic paper can be found in the `/documents` directory.
 
 ## Installation
 
-To install and run a Docker project, follow these steps:
+To install and run the application, follow these steps:
 
 1. Install Docker:
 
@@ -55,6 +55,7 @@ To configure the project, create a `.env` file in the root directory of the proj
 
 ```
 COMPOSE_PROJECT_NAME=iada
+
 PORT=80
 POSTGRES_URL=postgres://postgres:postgres@postgresql:5432/postgres
 CHROMA_URL=http://chroma:8000
@@ -67,23 +68,13 @@ Save the `.env` file and you're all set!
 
 ## Development
 
-Containers you might need to develop
+To install and run the application, follow these steps:
 
-1. Chroma:
+1. Install Docker:
 
-   ```
-   docker run -p 8000:8000 chromadb/chroma:0.5.4
-   ```
-
-2. PostgreSQL:
-
-   ```
-   docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres postgres:16.3
-   ```
-
-To start developing the backend of the project using FastAPI and Python, follow these steps:
-
-1. Make sure you have Python installed on your machine. You can download it from the official Python website.
+   - For Windows: Download and install Docker Desktop from the official Docker website.
+   - For macOS: Download and install Docker Desktop from the official Docker website.
+   - For Linux: Follow the instructions specific to your Linux distribution to install Docker.
 
 2. Clone the project repository:
 
@@ -97,93 +88,16 @@ To start developing the backend of the project using FastAPI and Python, follow 
    cd iada
    ```
 
-4. Navigate to the backend directory:
+4. Run the Docker ecosystem:
 
    ```
-   cd docker/iada/src/backend
+   docker compose -f docker-compose.dev.yml up --build
    ```
 
-5. Create a new virtual environment for your project:
+5. Access the application:
+   Open a web browser and navigate to `http://localhost` to access the running Docker application.
 
-   ```shell
-   python -m venv ./.venv
-   ```
-
-6. Activate the virtual environment:
-
-   - For Windows:
-
-     ```shell
-     ./.venv/Scripts/activate
-     ```
-
-   - For macOS/Linux:
-
-     ```shell
-     source ./.venv/bin/activate
-     ```
-
-7. Install the project dependencies:
-
-   ```shell
-   pip install -r requirements.txt
-   ```
-
-8. Start the development server:
-
-   ```shell
-   uvicorn src.main:app --reload-dir ./src --port 3001
-   ```
-
-   This command will start the FastAPI development server and automatically reload the server whenever you make changes to your code. You can access the development server at `http://localhost:3001`.
-
-9. Start coding!
-
-   You can now start coding your backend endpoints and logic. Any changes you make will be automatically reflected in the server.
-
-That's it! You have successfully set up the backend development environment using FastAPI and Python. Happy coding!
-
-To start developing the frontend of the project, follow these steps:
-
-1. Make sure you have Node.js installed on your machine. You can download it from the official Node.js website.
-
-2. Clone the project repository:
-
-   ```
-   git clone https://github.com/bartolomeoadrian/iada
-   ```
-
-3. Navigate to the project directory:
-
-   ```
-   cd iada
-   ```
-
-4. Navigate to the frontend directory:
-
-   ```
-   cd docker/iada/src/frontend
-   ```
-
-5. Install the project dependencies:
-
-   ```
-   npm install
-   ```
-
-6. Start the development server:
-
-   ```
-   npm run dev
-   ```
-
-   This command will start the Vite development server and compile your frontend code. You can access the development server at `http://localhost:3000`.
-
-7. Start coding!
-
-   You can now start coding your frontend components and styles. Any changes you make will be automatically reflected in the browser.
-
-That's it! You have successfully set up the frontend development environment using Vite. Happy coding!
+That's it! You have successfully set up the development environment. Happy coding!
 
 ## License
 

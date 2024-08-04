@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from .utils import (
+from .functions import (
     ask_proyects,
     ask_navigator,
     proyects_stream_generator,
