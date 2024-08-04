@@ -1,0 +1,14 @@
+(function ($) {
+    $.fn.sliderNoticias = function (parametros) {
+        var that = this;
+
+        that.find('.contenedor-resultadosListado').slick({
+            dots: parametros.puntos,
+            infinite: true,
+            speed: 500,
+            arrows: parametros.flechas,
+            slidesToShow: parametros.NumeroSlides,
+            slidesToScroll: parametros.NumeroSlides
+        })
+    };
+})(jQuery);

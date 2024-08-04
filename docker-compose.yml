@@ -1,0 +1,31 @@
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
+services:
+  postgresql:
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./storage/postgresql:/var/lib/postgresql/data
+    <<: [*restart_policy]
+
+  chroma:
+    image: chromadb/chroma:0.5.5
+    volumes:
+      - ./storage/chroma:/chroma/chroma
+    <<: [*restart_policy]
+
+  iada:
+    image: ghcr.io/bartolomeoadrian/iada:latest
+    ports:
+      - "${PORT}:80"
+    environment:
+      POSTGRESQL_URL: ${POSTGRESQL_URL}
+      CHROMA_URL: ${CHROMA_URL}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    depends_on:
+      - postgresql
+      - chroma
+    <<: [*restart_policy]

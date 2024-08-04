@@ -1,0 +1,159 @@
+/*https://flatuicolors.com/palette/ru*/
+
+.chat_wrapper {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: grid;
+	grid-template-rows: 1fr auto;
+	gap: 20px;
+	border-radius: 20px;
+	background-color: #5c98bd;
+}
+
+.chat_wrapper>.body {
+	overflow: auto;
+	overflow-x: hidden;
+	padding: 1rem;
+}
+
+/* Modern browsers with `scrollbar-*` support */
+@supports (scrollbar-width: auto) {
+	.chat_wrapper>.body {
+		scrollbar-color: #888 #f1f1f1;
+		scrollbar-width: thin;
+	}
+}
+
+/* Legacy browsers with `::-webkit-scrollbar-*` support */
+@supports selector(::-webkit-scrollbar) {
+	.chat_wrapper>.body::-webkit-scrollbar {
+		width: thin;
+	}
+
+	/* Track */
+	.chat_wrapper>.body::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	/* Handle */
+	.chat_wrapper>.body::-webkit-scrollbar-thumb {
+		background: #888;
+	}
+
+	/* Handle on hover */
+	.chat_wrapper>.body::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+
+}
+
+.chat_wrapper>.body>.messages {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper {}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message {
+	display: grid;
+	grid-template-rows: auto auto auto;
+	gap: 5px;
+	background-color: #FFF;
+	padding: 15px;
+	border-radius: 20px;
+	max-width: 80%;
+	list-style: none;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message .body {
+	overflow: auto;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message.left {
+	float: left;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message.right {
+	float: right;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message>.header>.title {
+	font-size: 14px;
+	color: #000;
+	font-weight: bold;
+	margin: 0px;
+}
+
+.chat_wrapper>.body>.messages>.message-wrapper>.message>.footer>.date {
+	font-size: 12px;
+	color: #000;
+	float: right;
+}
+
+.chat_wrapper>.footer {
+	padding: 0rem 1rem 1rem 1rem;
+}
+
+.chat_wrapper>.footer>.input {
+	width: 100%;
+	height: 40px;
+	position: relative;
+}
+
+.chat_wrapper>.footer>.input input {
+	font-size: 16px;
+	line-height: 1;
+	border-radius: 20px;
+	border: 0px;
+	width: 100%;
+	height: 100%;
+	padding: 0px 20px;
+	background-color: #FFF;
+	outline: none;
+}
+
+.chat_wrapper>.footer>.input input:focus {
+	border: 0px;
+	outline: none;
+}
+
+.chat_wrapper>.footer>.input button {
+	position: absolute;
+	right: 4px;
+	top: 3px;
+	height: 34px;
+	width: 34px;
+	background-color: #5c98bd;
+	color: #5c98bd;
+	z-index: 1;
+	border-radius: 50%;
+	border: 0px;
+	cursor: pointer;
+}
+
+
+.table_wrapper {
+	width: 100%;
+	overflow: auto;
+	margin: 20px 0px;
+}
+
+.table_wrapper table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table_wrapper table td {
+	padding: 10px;
+}
+
+.table_wrapper table thead {
+	color: #fff;
+}
+
+.table_wrapper table thead th {
+	padding: 10px;
+	background-color: #5c98bd;
+}

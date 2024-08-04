@@ -1,0 +1,28 @@
+services:
+  postgresql:
+    extends:
+      file: docker-compose.yml
+      service: postgresql
+    ports:
+      - "5432:5432"
+
+  chroma:
+    extends:
+      file: docker-compose.yml
+      service: chroma
+    ports:
+      - "8000:8000"
+
+  iada:
+    extends:
+      file: docker-compose.yml
+      service: iada
+    build:
+      context: ./docker/iada
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
+    volumes:
+      - ./docker/iada/config/supervisor/supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf
+      - ./docker/iada/config/nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+      - ./docker/iada/src/backend/src:/opt/iada/backend/src
+      - ./docker/iada/src/frontend/src:/opt/iada/frontend/src
