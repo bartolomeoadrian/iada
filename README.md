@@ -10,11 +10,11 @@ The academic paper can be found in the `/documents` directory.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Development](#development)
-- [License](#license)
-- [Contact](#contact)
+-   [Installation](#installation)
+-   [Configuration](#configuration)
+-   [Development](#development)
+-   [License](#license)
+-   [Contact](#contact)
 
 ## Installation
 
@@ -22,27 +22,27 @@ To install and run the application, follow these steps:
 
 1. Install Docker:
 
-   - For Windows: Download and install Docker Desktop from the official Docker website.
-   - For macOS: Download and install Docker Desktop from the official Docker website.
-   - For Linux: Follow the instructions specific to your Linux distribution to install Docker.
+    - For Windows: Download and install Docker Desktop from the official Docker website.
+    - For macOS: Download and install Docker Desktop from the official Docker website.
+    - For Linux: Follow the instructions specific to your Linux distribution to install Docker.
 
 2. Clone the project repository:
 
-   ```
-   git clone https://github.com/bartolomeoadrian/iada
-   ```
+    ```
+    git clone https://github.com/bartolomeoadrian/iada
+    ```
 
 3. Navigate to the project directory:
 
-   ```
-   cd iada
-   ```
+    ```
+    cd iada
+    ```
 
 4. Run the Docker ecosystem:
 
-   ```
-   docker compose up
-   ```
+    ```
+    docker compose up
+    ```
 
 5. Access the application:
    Open a web browser and navigate to `http://localhost` to access the running Docker application.
@@ -57,7 +57,7 @@ To configure the project, create a `.env` file in the root directory of the proj
 COMPOSE_PROJECT_NAME=iada
 
 PORT=80
-POSTGRESQL_URL=postgres://postgres:postgres@postgresql:5432/postgres
+POSTGRESQL_URL=postgres://postgres:postgres@postgresql:5432/iada
 CHROMA_URL=http://chroma:8000
 GEMINI_API_KEY=
 ```
@@ -72,27 +72,27 @@ To install and run the application, follow these steps:
 
 1. Install Docker:
 
-   - For Windows: Download and install Docker Desktop from the official Docker website.
-   - For macOS: Download and install Docker Desktop from the official Docker website.
-   - For Linux: Follow the instructions specific to your Linux distribution to install Docker.
+    - For Windows: Download and install Docker Desktop from the official Docker website.
+    - For macOS: Download and install Docker Desktop from the official Docker website.
+    - For Linux: Follow the instructions specific to your Linux distribution to install Docker.
 
 2. Clone the project repository:
 
-   ```
-   git clone https://github.com/bartolomeoadrian/iada
-   ```
+    ```
+    git clone https://github.com/bartolomeoadrian/iada
+    ```
 
 3. Navigate to the project directory:
 
-   ```
-   cd iada
-   ```
+    ```
+    cd iada
+    ```
 
 4. Run the Docker ecosystem:
 
-   ```
-   docker compose -f docker-compose.dev.yml up --build
-   ```
+    ```
+    docker compose -f docker-compose.dev.yml up --build
+    ```
 
 5. Access the application:
    Open a web browser and navigate to `http://localhost` to access the running Docker application.
@@ -105,12 +105,12 @@ This project is licensed under the [Creative Commons Attribution 4.0 Internation
 
 You are free to:
 
-- Share: Copy and redistribute the material in any medium or format.
-- Adapt: Remix, transform, and build upon the material for any purpose, even commercially.
+-   Share: Copy and redistribute the material in any medium or format.
+-   Adapt: Remix, transform, and build upon the material for any purpose, even commercially.
 
 Under the following terms:
 
-- Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+-   Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
 
 For more details, please refer to the [full license text](https://creativecommons.org/licenses/by/4.0/legalcode).
 
