@@ -14,13 +14,13 @@ from .utils.gemini import generation_config, genai
 navigator_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\nEstas son las páginas con las que trabajaras por ahora:\nhttps://hcdn.gob.ar : Es la página principal y contiene noticias y actividades ademas de botones de interés\nhttps://hcdn.gob.ar/proyectos/ : Esta página contiene toda la información referida a proyectos de ley de la república argentina, asi como tambien Boletín de Asuntos Tratados, Trámite Parlamentario, Boletín de Asuntos Entrados",
+    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\n Responde en el mismo idioma que te hablan",
 )
 
 proyects_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nResponderás normalmente a las preguntas que te hagan y solo generarás querys SQL si es necesario.",
+    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nResponderás normalmente a las preguntas que te hagan y solo generarás querys SQL si es necesario. Responde en el mismo idioma que te hablan",
 )
 
 
