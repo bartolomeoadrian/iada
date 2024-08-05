@@ -23,7 +23,7 @@ services:
         <<: [*restart_policy]
 
     iada:
-        image: ghcr.io/bartolomeoadrian/iada:latest
+        image: ghcr.io/bartolomeoadrian/iada:v1.3
         ports:
             - "${PORT}:80"
         environment:

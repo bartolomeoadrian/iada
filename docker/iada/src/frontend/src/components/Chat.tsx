@@ -98,7 +98,7 @@ function Chat(props: { url: string }) {
 	}
 
 	const drawTable = (message: Message) => {
-		if (!Array.isArray(message.data) || message.data.length <= 0) return <>There´s no results for this query</>;
+		if (!Array.isArray(message.data) || message.data.length <= 0) return <>No hay resultados</>;
 
 		const first = message.data[0];
 		const headers = Object.keys(first);
@@ -129,12 +129,22 @@ function Chat(props: { url: string }) {
 
 	useEffect(() => {
 		if (lastMessage) {
+			const urls = [];
+
 			// Expresión regular mejorada para capturar URLs desde texto en formato Markdown
 			const urlRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi;
-			const urls = [];
 			let match;
 			while ((match = urlRegex.exec(lastMessage)) !== null) {
 				urls.push(match[2]); // Captura solo la URL
+			}
+
+			if (urls.length === 0) {
+				// Expresión regular para capturar URLs desde texto en formato Markdown
+				const urlRegex = /(https?:\/\/[^\s]+)/gi;
+				let match;
+				while ((match = urlRegex.exec(lastMessage)) !== null) {
+					urls.push(match[1]); // Captura solo la URL
+				}
 			}
 
 			if (urls && urls.length > 0) {
@@ -142,10 +152,10 @@ function Chat(props: { url: string }) {
 
 				const newMessages: Array<Message> = [...messages, {
 					id: Math.random().toString(36).substring(7),
-					title: 'NYVA',
+					title: 'HCDN',
 					position: 'left',
 					type: 'text',
-					text: "Redirecting you in 5 seconds...",
+					text: "Redirigiendote en 5 segundos...",
 					date: new Date(),
 				}];
 

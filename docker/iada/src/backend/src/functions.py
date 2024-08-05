@@ -2,8 +2,10 @@ import json
 import logging
 import re
 
+from iso639 import Lang
 from typing import Union
 from .utils.vanna import vn
+from langdetect import detect
 from .utils.postgresql import pool
 from datetime import date, datetime
 from .utils.chroma import chroma_client
@@ -14,13 +16,13 @@ from .utils.gemini import generation_config, genai
 navigator_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés.\nNo sugieras páginas inicialmente si no es necesario.\n Responde en el mismo idioma que te hablan",
+    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina, debes responder en el mismo idioma que te hablen. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés indicando la URL.\nNo sugieras páginas inicialmente si no es necesario.\n ",
 )
 
 proyects_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nResponderás normalmente a las preguntas que te hagan y solo generarás querys SQL si es necesario. Responde en el mismo idioma que te hablan",
+    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina, debes responder en el mismo idioma que te hablan.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nResponderás normalmente a las preguntas que te hagan y solo generarás querys SQL si es necesario. \n",
 )
 
 
@@ -65,6 +67,12 @@ def execute_query_and_fetchall(query: str) -> Union[list, str]:
 
 
 def get_proyect_message(message, **kwargs):
+
+    #language = detect(message)
+    #language_name = Lang(language).name
+
+    #message = f"Generate a response in {language_name} for the message: {message}"
+
     return vn.get_sql_prompt(
         initial_prompt=""" """,
         question=message,
@@ -88,6 +96,9 @@ def get_navigator_message(message):
             }
         )
 
+    #language = detect(message)
+    #language_name = Lang(language).name
+
     return f"Based on the following related descriptions:\n{related_descriptions}\nGenerate a response for the message: {message}"
 
 
@@ -101,7 +112,7 @@ def proyects_stream_sql_generator(message):
         )
     except Exception as e:
         logging.error(e)
-        return """I'm sorry, I couldn't find the information you requested. Please try again."""
+        return """Lo siento, no pude encontrar la información que buscabas. ¿Podrías intentar preguntar de otra manera?"""
 
 
 def extract_sql_query(text):
