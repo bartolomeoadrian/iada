@@ -62,7 +62,7 @@ CHROMA_URL=http://chroma:8000
 GEMINI_API_KEY=
 ```
 
-Make sure to replace the values of `POSTGRES_URL` and `CHROMA_URL` with the appropriate URLs for your PostgreSQL and Chroma instances.
+Make sure to replace the values of `POSTGRESQL_URL` and `CHROMA_URL` with the appropriate URLs for your PostgreSQL and Chroma instances.
 
 Save the `.env` file and you're all set!
 

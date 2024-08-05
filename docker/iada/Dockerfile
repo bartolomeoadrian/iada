@@ -31,7 +31,7 @@ ADD ./src/backend/requirements.txt .
 RUN python3 -m pip install -v -r requirements.txt \
 	&& python3 -c "import chromadb;client = chromadb.Client();collection = client.create_collection('all-my-documents');collection.add(documents=['This is document1'], ids=['doc1']);results = collection.query(query_texts=['This is a query document'],n_results=1)"
 
-COPY . .
+ADD ./src/backend .
 
 # Configurattion
 WORKDIR /opt/iada
