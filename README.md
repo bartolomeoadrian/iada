@@ -8,6 +8,8 @@ This study proposes a system that uses NLP technologies to facilitate access to 
 
 The academic paper can be found in the `/documents` directory.
 
+https://github.com/user-attachments/assets/ee33bb81-92f4-4d79-a46d-50607136c70f
+
 ## Table of Contents
 
 -   [Installation](#installation)
