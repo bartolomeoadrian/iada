@@ -16,13 +16,19 @@ from .utils.gemini import generation_config, genai
 navigator_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina, debes responder en el mismo idioma que te hablen. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés indicando la URL.\nNo sugieras páginas inicialmente si no es necesario.\n ",
+    system_instruction="Eres un asistente encargado de darle la bienvenida a los usuarios al sitio web de la honorable cámara de diputados de la nación argentina, debes responder en el mismo idioma que te hablen. Debes ser hospitalario y redirigir a los usuarios a los sitios de interés indicando la URL.\nNo sugieras páginas inicialmente si no es necesario.\n Puedes responder con emojis \n ",
+)
+
+sql_model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    system_instruction="You should transform text into SQL ONLY if its needed, not always will be needed.\n",
 )
 
 proyects_model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina, debes responder en el mismo idioma que te hablan.\nEl usuario no debe saber que podés generar código SQL o que tenés acceso a una base de datos, no lo sugieras.\nResponderás normalmente a las preguntas que te hagan y solo generarás querys SQL si es necesario. \n",
+    system_instruction="Eres un asistente virtual que ayuda a los usuarios a responder preguntas sobre los proyectos de ley presentados en el Congreso de la República Argentina, debes responder en el mismo idioma que te hablan y no debes sugerir que tienen acceso a una base de datos o json, no menciones campos como ids o relacionados a base de datos.\n",
 )
 
 
@@ -31,6 +37,7 @@ webpage_collection = chroma_client.get_or_create_collection("webpage_description
 
 # Utils
 navigation_chats = {}
+sql_chats = {}
 proyects_chats = {}
 
 
@@ -66,12 +73,12 @@ def execute_query_and_fetchall(query: str) -> Union[list, str]:
         raise e
 
 
-def get_proyect_message(message, **kwargs):
+def get_sql_message(message, **kwargs):
 
-    #language = detect(message)
-    #language_name = Lang(language).name
+    # language = detect(message)
+    # language_name = Lang(language).name
 
-    #message = f"Generate a response in {language_name} for the message: {message}"
+    # message = f"Generate a response in {language_name} for the message: {message}"
 
     return vn.get_sql_prompt(
         initial_prompt=""" """,
@@ -96,23 +103,14 @@ def get_navigator_message(message):
             }
         )
 
-    #language = detect(message)
-    #language_name = Lang(language).name
+    # language = detect(message)
+    # language_name = Lang(language).name
 
     return f"Based on the following related descriptions:\n{related_descriptions}\nGenerate a response for the message: {message}"
 
 
-def proyects_stream_sql_generator(message):
-    sql = extract_sql_query(message)
-    print("Extracted SQL", sql)
-
-    try:
-        return json.dumps(
-            {"response": execute_query_and_fetchall(sql), "type": "table"}
-        )
-    except Exception as e:
-        logging.error(e)
-        return """Lo siento, no pude encontrar la información que buscabas. ¿Podrías intentar preguntar de otra manera?"""
+def get_proyect_message(message, context):
+    return f"Based on the following related descriptions:\n{context}\nGenerate a response for the message without talking about any json or database: {message}"
 
 
 def extract_sql_query(text):
@@ -127,21 +125,8 @@ def extract_sql_query(text):
 
 
 def proyects_stream_generator(stream):
-    i = 0
-    message = ""
-
     for chunk in stream:
-        i = i + 1
-        message = message + chunk.text
-
-        if i >= 3 and not vn.is_sql_valid(extract_sql_query(message)):
-            if i == 3:
-                yield message
-            else:
-                yield chunk.text
-
-    if vn.is_sql_valid(extract_sql_query(message)):
-        yield proyects_stream_sql_generator(message)
+        yield chunk.text
 
 
 def navigator_stream_generator(stream):
@@ -150,11 +135,23 @@ def navigator_stream_generator(stream):
 
 
 def ask_proyects(chat_id, message):
+    if chat_id not in sql_chats:
+        sql_chats[chat_id] = sql_model.start_chat()
+
+    chat: genai.ChatSession = sql_chats[chat_id]
+    message = chat.send_message(get_sql_message(message))
+    context = ""
+
+    if vn.is_sql_valid(extract_sql_query(message.text)):
+        print("Extracted SQL", message.text)
+        context = execute_query_and_fetchall(extract_sql_query(message.text))
+        print("Resulted SQL", context)
+
     if chat_id not in proyects_chats:
         proyects_chats[chat_id] = proyects_model.start_chat()
 
     chat: genai.ChatSession = proyects_chats[chat_id]
-    stream = chat.send_message(get_proyect_message(message), stream=True)
+    stream = chat.send_message(get_proyect_message(message, context), stream=True)
 
     return stream
 
